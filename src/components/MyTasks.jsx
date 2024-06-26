@@ -53,7 +53,7 @@ export default function MyTasks() {
         Logout
       </button>
       <AddTask />
-      <h1>My Tasks</h1>
+      <h1 className="my-10 text-xl font-bold">My Tasks</h1>
       {taskList.map((task, key) => (
         <TaskTile key={key} task={task} />
       ))}
