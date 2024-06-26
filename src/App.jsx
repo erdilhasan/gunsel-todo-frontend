@@ -1,12 +1,23 @@
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./App.css";
-import LoginTile from "./components/loginComponent.jsx";
-import TaskTile from "./components/task_tile.jsx";
+import LoginForm from "./components/LoginForm.jsx";
+import RegisterForm from "./components/RegisterForm.jsx";
 
 function App() {
   return (
     <>
-      <LoginTile></LoginTile>
-      <TaskTile></TaskTile>
+      <BrowserRouter>
+        <Routes>
+          {/*<Route path="/" element={<Layout />}>*/}
+
+          <Route index element={<LoginForm />} />
+          <Route path="login" element={<LoginForm />}></Route>
+          <Route path="register" element={<RegisterForm />}></Route>
+
+          <Route path="*" element={<h1>404 No Page Found</h1>} />
+          {/* </Route> Closing Tag for layout*/}
+        </Routes>
+      </BrowserRouter>
     </>
   );
 }
