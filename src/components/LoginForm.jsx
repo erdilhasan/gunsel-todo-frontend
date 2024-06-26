@@ -16,6 +16,11 @@ export default function LoginForm() {
       requestOptions
     );
     const res = await response.status;
+    if (res == 200) {
+      const body = await response.json();
+      localStorage.setItem("token", body.token);
+      navigate("/mytasks");
+    }
     alert(res);
   };
   return (
