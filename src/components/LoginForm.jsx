@@ -19,6 +19,8 @@ export default function LoginForm() {
     if (res == 200) {
       const body = await response.json();
       localStorage.setItem("token", body.token);
+      localStorage.setItem("refreshtoken", body.refreshToken);
+
       navigate("/mytasks");
     }
     alert(res);

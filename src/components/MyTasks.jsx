@@ -8,10 +8,38 @@ export default function MyTasks() {
   const [taskList, setTaskList] = useState([]);
   const [authorizated, setAuthorizated] = useState(false);
   const token = localStorage.getItem("token");
-
+  const refreshtoken = localStorage.getItem("refreshtoken");
+  async function refreshAccessToken() {
+    console.log("refreshToken:" + refreshtoken);
+    const response = await fetch(
+      "http://localhost:3000/api/user/refreshToken",
+      {
+        headers: {
+          Authorization: refreshtoken,
+        },
+      }
+    );
+    console.log("Statusss" + response.status);
+    if (response.status == 401) {
+      navigate("/login");
+    } else {
+      response
+        .json()
+        .then((json) => localStorage.setItem("token", json.token))
+        .catch((error) => console.error(error));
+      // window.location.reload();
+    }
+  }
   useEffect(() => {
+    console.log(token);
     if (!token) {
       navigate("/login");
+      if (!refreshtoken) {
+        console.log("s");
+      } else {
+        console.log("refrwshingtoken");
+        refreshAccessToken().then(() => navigate("/"));
+      }
     }
   }, []);
 
@@ -27,6 +55,7 @@ export default function MyTasks() {
       );
 
       if (response.status == 401) {
+        refreshAccessToken().then(() => console.log("refreshed"));
         navigate("/login");
       } else {
         response
