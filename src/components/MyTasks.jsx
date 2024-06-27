@@ -7,6 +7,7 @@ export default function MyTasks() {
   const navigate = useNavigate();
   const [taskList, setTaskList] = useState([]);
   const [authorizated, setAuthorizated] = useState(false);
+
   const token = localStorage.getItem("token");
   const refreshtoken = localStorage.getItem("refreshtoken");
   async function refreshAccessToken() {
@@ -26,22 +27,10 @@ export default function MyTasks() {
       response
         .json()
         .then((json) => localStorage.setItem("token", json.token))
+        .then(() => setAuthorizated(true))
         .catch((error) => console.error(error));
-      // window.location.reload();
     }
   }
-  useEffect(() => {
-    console.log(token);
-    if (!token) {
-      navigate("/login");
-      if (!refreshtoken) {
-        console.log("s");
-      } else {
-        console.log("refrwshingtoken");
-        refreshAccessToken().then(() => navigate("/"));
-      }
-    }
-  }, []);
 
   useEffect(() => {
     async function fetchData() {
@@ -55,8 +44,8 @@ export default function MyTasks() {
       );
 
       if (response.status == 401) {
-        refreshAccessToken().then(() => console.log("refreshed"));
-        navigate("/login");
+        await refreshAccessToken();
+        //navigate("/login");
       } else {
         response
           .json()
@@ -70,6 +59,7 @@ export default function MyTasks() {
 
   function logOut() {
     localStorage.removeItem("token");
+    localStorage.removeItem("refreshtoken");
     window.location.reload();
   }
 
